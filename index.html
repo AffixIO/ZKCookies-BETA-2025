@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZKP Cookie Banner Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      padding: 2rem;
+      padding-bottom: 10rem; /* Extra padding for banner */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 50%, rgba(233, 69, 96, 0.05) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(233, 69, 96, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #ffffff 0%, #b8b8b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeInDown 0.8s ease-out;
+      cursor: default;
+      transition: all 0.3s ease;
+    }
+
+    h1:hover {
+      transform: scale(1.02);
+      background: linear-gradient(135deg, #ffffff 0%, #e94560 50%, #b8b8b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .subtitle {
+      font-size: 1.5rem;
+      color: #b8b8b8;
+      margin-bottom: 2rem;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+      transition: color 0.3s ease;
+    }
+
+    .subtitle:hover {
+      color: #e94560;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .info-card {
+      background: rgba(26, 26, 46, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+      transition: all 0.3s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(233, 69, 96, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 50px rgba(233, 69, 96, 0.2);
+      border-color: rgba(233, 69, 96, 0.3);
+    }
+
+    .info-card:hover::before {
+      left: 100%;
+    }
+
+    .info-card h2 {
+      color: #e94560;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .info-card:hover h2 {
+      transform: translateX(5px);
+      text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
+    }
+
+    .info-card p {
+      line-height: 1.8;
+      color: #b8b8b8;
+      margin-bottom: 1rem;
+    }
+
+    .status {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      background: rgba(233, 69, 96, 0.1);
+      border: 1px solid rgba(233, 69, 96, 0.3);
+      transition: all 0.3s ease;
+      animation: pulse 2s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .status::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    .status.success {
+      background: rgba(76, 175, 80, 0.1);
+      border-color: rgba(76, 175, 80, 0.3);
+      animation: successPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(233, 69, 96, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 0 10px rgba(233, 69, 96, 0);
+      }
+    }
+
+    @keyframes successPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        left: -100%;
+      }
+      100% {
+        left: 100%;
+      }
+    }
+
+    code {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    code:hover {
+      background: rgba(233, 69, 96, 0.2);
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(233, 69, 96, 0.3);
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .tech-item {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tech-item::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(233, 69, 96, 0.1);
+      transform: translate(-50%, -50%);
+      transition: width 0.4s ease, height 0.4s ease;
+    }
+
+    .tech-item:hover {
+      transform: scale(1.05);
+      background: rgba(233, 69, 96, 0.1);
+      border-color: rgba(233, 69, 96, 0.3);
+      box-shadow: 0 5px 15px rgba(233, 69, 96, 0.2);
+    }
+
+    .tech-item:hover::after {
+      width: 200px;
+      height: 200px;
+    }
+
+    .tech-item:active {
+      transform: scale(0.98);
+    }
+
+    .tech-item h3 {
+      color: #e94560;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tech-item:hover h3 {
+      transform: translateX(5px);
+      text-shadow: 0 0 8px rgba(233, 69, 96, 0.6);
+    }
+
+    .tech-item p {
+      font-size: 0.9rem;
+      margin: 0;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tech-item:hover p {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔒 ZKP Cookie Banner</h1>
+    <p class="subtitle">Zero-Knowledge Proof Cookie Consent System</p>
+
+    <div class="info-card">
+      <h2>How It Works</h2>
+      <p>
+        This demo implements an offchain privacy-preserving cookie banner.
+        When you click "Accept", a cryptographic proof is generated that verifies your consent
+        without revealing your identity or storing your preferences on the server.
+      </p>
+      <p>
+        <strong>Key Features:</strong>
+      </p>
+      <ul style="margin-left: 2rem; line-height: 2; color: #b8b8b8; list-style: none;">
+        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative; transition: all 0.3s ease;">
+          <span style="position: absolute; left: 0; color: #e94560;">▸</span>
+          Offchain hash-based proofs (HMAC signatures)
+        </li>
+        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative; transition: all 0.3s ease;">
+          <span style="position: absolute; left: 0; color: #e94560;">▸</span>
+          Deterministic hash function for commitments and nullifiers
+        </li>
+        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative; transition: all 0.3s ease;">
+          <span style="position: absolute; left: 0; color: #e94560;">▸</span>
+          Persistent identity: 32-byte secret stored in localStorage
+        </li>
+        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative; transition: all 0.3s ease;">
+          <span style="position: absolute; left: 0; color: #e94560;">▸</span>
+          Merkle tree for consent state (no server-side preference storage)
+        </li>
+        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative; transition: all 0.3s ease;">
+          <span style="position: absolute; left: 0; color: #e94560;">▸</span>
+          Double-spend prevention via nullifier tracking
+        </li>
+        <li style="margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative; transition: all 0.3s ease;">
+          <span style="position: absolute; left: 0; color: #e94560;">▸</span>
+          Privacy-preserving: identity secret never leaves the browser
+        </li>
+      </ul>
+      
+      <style>
+        .info-card ul li:hover {
+          transform: translateX(10px);
+          color: #ffffff;
+        }
+        .info-card ul li:hover span {
+          transform: scale(1.5);
+          display: inline-block;
+        }
+      </style>
+      <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(233, 69, 96, 0.1); border-radius: 8px; border-left: 3px solid #e94560;">
+        <strong>Note:</strong> This demo runs in offchain mode. For full ZK proofs with Groth16, 
+        compile the circuit files and use the ZK mode.
+      </p>
+    </div>
+
+    <div class="info-card">
+      <h2>Status</h2>
+      <div id="status" class="status">
+        <strong>Initializing...</strong>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+          Checking for existing consent proof...
+        </p>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h2>Technical Stack</h2>
+      <div class="tech-grid">
+        <div class="tech-item">
+          <h3>Proof System</h3>
+          <p>Offchain HMAC Signatures</p>
+        </div>
+        <div class="tech-item">
+          <h3>Hash Function</h3>
+          <p>Deterministic Hash (Fallback)</p>
+        </div>
+        <div class="tech-item">
+          <h3>Identity</h3>
+          <p>32-byte Secret (localStorage)</p>
+        </div>
+        <div class="tech-item">
+          <h3>Client Framework</h3>
+          <p>Vite 5.4.21 + TypeScript</p>
+        </div>
+        <div class="tech-item">
+          <h3>Backend Server</h3>
+          <p>Node.js + Express</p>
+        </div>
+        <div class="tech-item">
+          <h3>State Management</h3>
+          <p>In-Memory Merkle Tree</p>
+        </div>
+        <div class="tech-item">
+          <h3>Dependencies</h3>
+          <p>snarkjs, circomlib</p>
+        </div>
+        <div class="tech-item">
+          <h3>Ports</h3>
+          <p>Frontend: 10001<br>Backend: 100</p>
+        </div>
+      </div>
+      <p style="margin-top: 1rem; font-size: 0.9rem; color: #999;">
+        <strong>ZK Mode Available:</strong> The system supports full Groth16 ZK proofs when circuit files (WASM/zkey) are available. 
+        Currently running in offchain mode for faster development.
+      </p>
+    </div>
+
+    <div class="info-card">
+      <h2>Privacy Guarantees</h2>
+      <p>
+        <strong>No tracking:</strong> Your consent preferences are never stored on the server.
+        Only cryptographic commitments are stored in a Merkle tree.
+      </p>
+      <p>
+        <strong>No identity leakage:</strong> Your 32-byte identity secret never leaves your browser.
+        Only proofs and commitments are sent to the server.
+      </p>
+      <p>
+        <strong>Double-spend prevention:</strong> Nullifiers prevent the same proof from being used twice.
+        The server tracks used nullifiers to prevent replay attacks.
+      </p>
+      <p>
+        <strong>Reset capability:</strong> For testing, you can reset both client and server state 
+        by running <code>resetBanner()</code> in the browser console.
+      </p>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
+

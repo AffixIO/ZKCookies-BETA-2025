@@ -1,0 +1,10 @@
+name = "zkcookies-verifier"
+main = "verify.ts"
+compatibility_date = "2024-01-01"
+
+[env.production]
+vars = { VERIFICATION_KEY = "{{VERIFICATION_KEY}}" }
+
+[env.development]
+vars = { VERIFICATION_KEY = "{{VERIFICATION_KEY}}" }
+
