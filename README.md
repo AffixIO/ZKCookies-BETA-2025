@@ -1,4 +1,6 @@
-# ZKP Cookie Banner - Donate: https://buymeacoffee.com/paparichens
+# ZKP Cookie Banner 
+
+# Donate: https://buymeacoffee.com/paparichens
 
 Production-ready Zero-Knowledge Proof Cookie Consent System with Groth16 on BLS12-381.
 
