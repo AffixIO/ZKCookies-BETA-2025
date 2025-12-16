@@ -1,4 +1,4 @@
-# ZKP Cookie Banner 
+# Zero Knowledge Proof Cookie Banner 
 
 # Donate: https://buymeacoffee.com/paparichens
 
